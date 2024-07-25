@@ -1,4 +1,4 @@
-const { hash } = require('bcryptjs');
+const { hash, compare } = require('bcryptjs');
 const AppError = require("../utils/AppError");
 
 class UserService {
@@ -40,8 +40,39 @@ class UserService {
         return await this.userRepository.create({ name, email, hashedPassword, is_admin });
     }
 
-    async update({ id, name, email, password, oldPassword, is_admin }) {
+    async update(id, { name, password, oldPassword, is_admin }) {
 
+        if (!name) {
+            throw new AppError("Name is required", 400);
+        }
+
+        if (!password) {
+            throw new AppError("Password is required", 400);
+        }
+
+        const user = await this.userRepository.findById(id);
+
+        if (!user) {
+            throw new AppError("User not found", 404);
+        }
+
+        user.name = name ?? user.name;
+
+        if (password && !oldPassword) {
+            throw new AppError("You need to enter your old password to set a new password.", 400);
+        }
+
+        if (password && oldPassword) {
+            const checkOldPassword = await compare(oldPassword, user.password);
+
+            if (!checkOldPassword) {
+                throw new AppError("The old password does not match.");
+            }
+
+            user.password = await hash(password, 12);
+        }
+
+        await this.userRepository.update(user);
     }
 
     async delete(id) {

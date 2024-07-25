@@ -38,14 +38,13 @@ class UsersController {
 
     async update(req, res) {
         const { id } = req.params;
-        const idInt = parseInt(id)
 
         const { name, password, oldPassword, is_admin } = req.body;
 
         const userRepository = new UserRepository();
         const userService = new UserService(userRepository);
 
-        await userService.update({ idInt, name, password, oldPassword, is_admin });
+        await userService.update(parseInt(id), { name, password, oldPassword, is_admin });
 
         res.status(200).json({ message: "User updated successfully" });
     }
