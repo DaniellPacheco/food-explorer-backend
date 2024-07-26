@@ -3,12 +3,13 @@ const { Router } = require('express');
 const userRoute = Router();
 
 const UserController = require("../controllers/UserController");
+const ensureAuthenticated = require("../middlewares/ensureAuthenticated");
 
 const userController = new UserController();
 
 userRoute.get("/", userController.index);
 userRoute.get("/:id", userController.show);
-userRoute.post("/", userController.create);
+userRoute.post("/", ensureAuthenticated, userController.create);
 userRoute.put("/:id", userController.update);
 userRoute.delete("/:id", userController.delete);
 
