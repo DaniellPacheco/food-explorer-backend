@@ -15,6 +15,13 @@ class SessionController {
             throw new Error("Invalid email or password");
         }
 
+        res.cookie("token", session.token, {
+            httpOnly: true,
+            sameSite: "none",
+            secure: true,
+            maxAge: 15 * 60 * 1000
+        });
+
         res.status(200).json({ token: session.token, user: session.user });
 
     }

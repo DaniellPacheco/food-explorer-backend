@@ -7,9 +7,11 @@ const ensureAuthenticated = require("../middlewares/ensureAuthenticated");
 
 const userController = new UserController();
 
+userRoute.use(ensureAuthenticated);
+
 userRoute.get("/", userController.index);
 userRoute.get("/:id", userController.show);
-userRoute.post("/", ensureAuthenticated, userController.create);
+userRoute.post("/", userController.create);
 userRoute.put("/:id", userController.update);
 userRoute.delete("/:id", userController.delete);
 
