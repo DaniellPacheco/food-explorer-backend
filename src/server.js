@@ -11,7 +11,7 @@ const uploadConfig = require("./configs/upload");
 
 const AppError = require("./utils/AppError");
 
-migrationsRun();
+// migrationsRun();
 
 const app = express();
 
