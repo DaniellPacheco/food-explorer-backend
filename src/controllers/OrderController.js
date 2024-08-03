@@ -36,10 +36,12 @@ class OrderController {
 
         const { id } = req.params;
 
+        const dishRepository = new DishRepository();
         const orderRepository = new OrderRepository();
-        const orderService = new OrderService(orderRepository);
+        const orderItemRepository = new OrderItemRepository();
+        const orderService = new OrderService(orderRepository, orderItemRepository, dishRepository);
 
-        const order = await orderService.show();
+        const order = await orderService.show(parseInt(id));
 
         res.status(200).json(order);
 
@@ -49,8 +51,17 @@ class OrderController {
 
         const { id } = req.params;
 
+        const { status, total_price, payment_method, dishes } = req.body;
+
         const orderRepository = new OrderRepository();
         const orderService = new OrderService(orderRepository);
+
+        const order = await orderService.update(parseInt(id), status, total_price, payment_method, dishes);
+
+        res.status(200).json({
+            message: "Order updated successfully",
+            order: order,
+        });
 
     }
 

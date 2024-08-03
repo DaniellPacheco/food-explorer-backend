@@ -36,8 +36,6 @@ class OrderService {
             throw new AppError('Order could not be created', 500);
         }
 
-
-
         if (dishes) {
             let totalPrice = 0;
 
@@ -80,8 +78,60 @@ class OrderService {
     }
 
     async index() {
+
         const orders = await this.orderRepository.findAll();
         return orders;
+    }
+
+    async show(id) {
+        const order = await this.orderRepository.findById(id);
+
+        if (!order) {
+            throw new AppError('Order not found', 404);
+        }
+
+        const dishes = await this.orderItemRepository.findDishesOrder(id);
+
+        if (!dishes) {
+            throw new AppError('Dishes not found', 404);
+        }
+
+        const orderWithDishes = {
+            ...order,
+            dishes: dishes
+        }
+
+        return orderWithDishes;
+    }
+
+    async update(id, status, total_price, payment_method, dishes) {
+        if (!status) {
+            throw new AppError('Status is required', 400);
+        }
+
+        if (!total_price) {
+            throw new AppError('Total price is required', 400);
+        }
+
+        if (!payment_method) {
+            throw new AppError('Payment method is required', 400);
+        }
+
+        const [order] = await this.orderRepository.update(
+            id,
+            status,
+            total_price,
+            payment_method,
+        );
+
+        const updatedOrder = await this.orderRepository.findById(order.id);
+
+        return updatedOrder;
+
+    }
+
+    async delete(id) {
+        return await this.orderRepository.delete(id);
     }
 }
 
