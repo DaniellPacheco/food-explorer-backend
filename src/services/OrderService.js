@@ -1,11 +1,13 @@
 const AppError = require("../utils/AppError");
 
 class OrderService {
-    constructor(orderRepository) {
+    constructor(orderRepository, orderItemRepository, dishRepository) {
         this.orderRepository = orderRepository;
+        this.orderItemRepository = orderItemRepository;
+        this.dishRepository = dishRepository;
     }
 
-    async create(status, total_price, payment_method, created_by, dishes) {
+    async create(user_id, status, total_price, payment_method, dishes) {
 
         if (!status) {
             throw new AppError('Status is required', 400);
@@ -19,11 +21,68 @@ class OrderService {
             throw new AppError('Payment method is required', 400);
         }
 
-        if (!created_by) {
+        if (!user_id) {
             throw new AppError('Created by is required', 400);
+        }
+
+        const [order] = await this.orderRepository.create(
+            status,
+            total_price,
+            payment_method,
+            user_id
+        );
+
+        if (!order) {
+            throw new AppError('Order could not be created', 500);
         }
 
 
 
+        if (dishes) {
+            let totalPrice = 0;
+
+            for (const dish of dishes) {
+                await this.orderItemRepository.create(order.id, dish.id, dish.quantity);
+
+                let dishPrice = await this.dishRepository.getPrice(dish.id);
+
+                if (!dishPrice) {
+                    throw new AppError(`Dish not found: ${dish.id}`, 404);
+                }
+
+                totalPrice += dishPrice.price * dish.quantity;
+            }
+
+            if (totalPrice > 0) {
+                await this.orderRepository.updateTotalPrice(order.id, totalPrice);
+            }
+        }
+
+        const newOrder = await this.orderRepository.findById(order.id);
+
+        if (!newOrder) {
+            throw new AppError('Order not found', 404);
+        }
+
+        const newOrderDishes = await this.orderItemRepository.findByOrderId(order.id);
+
+        if (!newOrderDishes) {
+            throw new AppError('Order items not found', 404);
+        }
+
+        const newOrderWithDishes = {
+            ...newOrder,
+            dishes: newOrderDishes
+        }
+
+        return newOrderWithDishes;
+
+    }
+
+    async index() {
+        const orders = await this.orderRepository.findAll();
+        return orders;
     }
 }
+
+module.exports = OrderService;

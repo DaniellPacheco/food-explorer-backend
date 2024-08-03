@@ -82,6 +82,10 @@ class DishRepository {
         return await knex('dishes').where({ name }).first();
     }
 
+    async getPrice(id) {
+        return await knex('dishes').select('price').where({ id }).first();
+    }
+
     async update({ id, name, price, description, image = null }) {
         return await knex('dishes').where({ id }).update({ id, name, price, description, image })
     }
