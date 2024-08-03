@@ -11,7 +11,6 @@ class DishRepository {
                 image
             });
 
-        // console.log(dish_id)
         return dish_id;
     }
 
