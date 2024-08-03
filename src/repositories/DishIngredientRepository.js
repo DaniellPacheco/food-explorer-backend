@@ -12,6 +12,10 @@ class DishIngredientRepository {
     async findAll() {
         return await knex('dishes_ingredients').select('*');
     }
+
+    async findByDishId(id) {
+        return await knex('dishes_ingredients').select("name").where({ dish_id: id });
+    }
 }
 
 module.exports = DishIngredientRepository;

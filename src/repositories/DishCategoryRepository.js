@@ -10,8 +10,16 @@ class DishCategoryRepository {
         });
     }
 
-    async getAll() {
+    async index() {
         return await knex('dishes_categories').select('*');
+    }
+
+    async findByDishId(id) {
+        return await knex('dishes_categories').where({ dish_id: id }).first();
+    }
+
+    async deleteByDishId(id) {
+        return await knex('dishes_categories').select('*').where({ id }).del();
     }
 
 }
