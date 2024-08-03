@@ -21,7 +21,7 @@
 
 O projeto Food Explorer consiste no desafio final do programa Explorer da Rocketseat. Trata-se de uma aplicação de cardápio digital para um restaurante fictício.
 
-O back-end do projeto, que lida com a lógica e o armazenamento dos dados, está disponível neste repositório. Já o front-end, responsável pela interface do usuário, está disponível [aqui](https://github.com/daniellpacheco/food-explorer-frontend).
+O back-end do projeto, que lida com a lógica e o armazenamento dos dados, está disponível neste repositório. Já o front-end, responsável pela interface do usuário, está disponível [aqui](link).
 
 <h2 id="structure">📌 Estrutura</h2>
 
@@ -55,7 +55,7 @@ Este projeto foi desenvolvido com as seguintes tecnologias:
 
 <h2 id="usage">💡 Utilização</h2>
 
-O back-end do projeto está hospedado no endereço https://food-explorer-backend-oxwh.onrender.com. A aplicação Food Explorer está disponível para uso [aqui](https://food-explorer-frontend.netlify.app/).
+O back-end do projeto está hospedado no endereço https://food-explorer-backend-oxwh.onrender.com. A aplicação Food Explorer está disponível para uso [aqui](link).
 
 ⚠️ **Importante**: Este projeto utiliza uma hospedagem gratuita para o back-end, portanto, pode haver atrasos no tempo de resposta do servidor.
 
@@ -64,7 +64,7 @@ Você também pode executá-lo em sua máquina localmente. Certifique-se de ter 
 1. Clone o projeto:
 
 ```
-$ git clone https://github.com/madalena-rocha/food-explorer-backend
+$ git clone https://github.com/DaniellPacheco/food-explorer-backend
 ```
 
 2. Acesse a pasta do projeto:
