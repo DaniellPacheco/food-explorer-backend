@@ -9,6 +9,7 @@ const dishesCategoriesRoute = require("./dishes_categories.routes");
 const dishesIngredientsRoute = require("./dishes_ingredients.routes");
 const dishesFavoritesRoute = require("./dishes_favorites.routes");
 const ordersRoute = require("./orders.routes");
+const cartsRoute = require("./carts.routes");
 
 router.get("/", (req, res) => {
     res.json({ message: "Welcome to the Express.js API!" });
@@ -20,5 +21,6 @@ router.use("/categories", dishesCategoriesRoute);
 router.use("/ingredients", dishesIngredientsRoute);
 router.use("/favorites", dishesFavoritesRoute);
 router.use("/orders", ordersRoute);
+router.use("/carts", cartsRoute);
 
 module.exports = router;

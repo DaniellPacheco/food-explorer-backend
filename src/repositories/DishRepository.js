@@ -1,14 +1,15 @@
 const knex = require('../database/knex');
 
 class DishRepository {
-    async create({ name, price, description, image = null }) {
+    async create({ name, price, description, image = null, created_by }) {
         const dish_id = knex('dishes')
             .returning('id')
             .insert({
                 name,
                 price,
                 description,
-                image
+                image,
+                created_by
             });
 
         return dish_id;

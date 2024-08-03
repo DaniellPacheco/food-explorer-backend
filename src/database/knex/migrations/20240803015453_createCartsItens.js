@@ -7,7 +7,6 @@ exports.up = function (knex) {
         table.increments('id').primary();
         table.integer('cart_id').references('id').inTable('carts').onDelete('CASCADE');
         table.integer('dish_id').references('id').inTable('dishes');
-        table.string('name').notNullable();
         table.integer('quantity').notNullable();
     });
 };

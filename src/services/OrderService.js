@@ -78,7 +78,6 @@ class OrderService {
     }
 
     async index() {
-
         const orders = await this.orderRepository.findAll();
         return orders;
     }
