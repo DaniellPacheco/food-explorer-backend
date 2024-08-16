@@ -1,5 +1,5 @@
 <h1 align="center" style="text-align: center;">
-  <img alt="Logo do Food Explorer" src="./src/assets/favicon.svg" style="vertical-align: middle; margin-right: 10px;">
+  <img alt="Logo do Food Explorer" src="./favicon.svg" style="vertical-align: middle; margin-right: 10px;">
   Food Explorer
 </h1>
 
