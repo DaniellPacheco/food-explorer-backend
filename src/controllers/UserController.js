@@ -61,6 +61,18 @@ class UsersController {
         res.status(200).json({ message: "User deleted successfully" });
     }
 
+    async validate(req, res) {
+        const { user } = req;
+
+        const userRepository = new UserRepository();
+        const userService = new UserService(userRepository);
+
+        const validatedUser = await userService.validate(parseInt(user.id));
+        console.log(validatedUser);
+
+        res.status(200).json({ validatedUser });
+    }
+
 }
 
 module.exports = UsersController;

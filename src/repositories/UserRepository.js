@@ -26,6 +26,10 @@ class UserRepository {
         return await knex('users').where({ id }).del();
     }
 
+    async validate(id) {
+        return await knex('users').where({ id }).first();
+    }
+
 }
 
 module.exports = UserRepository;

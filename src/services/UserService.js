@@ -85,6 +85,21 @@ class UserService {
         return userDeleted;
     }
 
+    async validate(id) {
+        if (!id) {
+            throw new AppError("ID is required", 400);
+        }
+
+        const user = await this.userRepository.validate(id);
+
+        console.log(user);
+
+        if (!user) {
+            throw new AppError("User not found", 404);
+        }
+
+        return user;
+    }
 
 }
 
