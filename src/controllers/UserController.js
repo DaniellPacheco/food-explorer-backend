@@ -68,7 +68,6 @@ class UsersController {
         const userService = new UserService(userRepository);
 
         const validatedUser = await userService.validate(parseInt(user.id));
-        console.log(validatedUser);
 
         res.status(200).json({ validatedUser });
     }

@@ -15,7 +15,7 @@ class UserService {
         return await this.userRepository.findById(id);
     }
 
-    async create({ name, email, password, is_admin }) {
+    async create({ name, email, password, is_admin = false }) {
 
         if (!name) {
             throw new AppError("Name is required", 400);
@@ -70,6 +70,14 @@ class UserService {
             }
 
             user.password = await hash(password, 12);
+        }
+
+        if (is_admin !== undefined && user.id !== id && !user.is_admin) {
+            throw new AppError("Only administrators can update 'is_admin' field.", 403);
+        }
+
+        if (is_admin !== undefined && user.is_admin) {
+            user.is_admin = is_admin;
         }
 
         await this.userRepository.update(user);

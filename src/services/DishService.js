@@ -41,19 +41,24 @@ class DishService {
         }
 
         const diskStorage = new DiskStorage();
+        let filename = "";
 
         if (image) {
-            await diskStorage.saveFile(image);
+            filename = await diskStorage.saveFile(image);
         }
 
         const [dish] = await this.dishRepository.create({
             name,
             price,
             description,
-            image,
+            image: filename,
             created_by: user_id,
             updated_by: user_id
         });
+
+        if (!dish) {
+            throw new AppError("Failed to create dish", 500);
+        }
 
         const { id: dish_id } = dish;
 
@@ -67,6 +72,8 @@ class DishService {
             }
         });
 
+
+
         await this.dishIngredientRepository.create(ingredientsInsert);
 
         return dish_id;
@@ -78,8 +85,22 @@ class DishService {
         if (search) {
             const dishFiltered = search.split(",").map((dish) => dish.trim()).map((dish) => `%${dish}%`);
 
-            return await this.dishRepository.findAll(dishFiltered);
+            const dishes = await this.dishRepository.findAll(dishFiltered);
+
+            if (!dishes) {
+                throw new AppError("No dishes found", 404);
+            }
+
+            return dishes;
         }
+
+        const dishes = await this.dishRepository.findAll();
+
+        if (!dishes) {
+            throw new AppError("No dishes found", 404);
+        }
+
+        return dishes;
 
     }
 

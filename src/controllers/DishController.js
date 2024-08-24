@@ -9,7 +9,8 @@ class DishController {
         const { name, price, description, category, ingredients } = req.body;
 
         const user_id = req.user.id;
-        const image = req.file ? req.file.filename : null;
+        const image = req.file ? req.file.filename : "";
+        // const image = req.file.filename;
 
         const dishIngredientRepository = new DishIngredientRepository();
         const dishCategoryRepository = new DishCategoryRepository();
@@ -44,10 +45,6 @@ class DishController {
         const dishService = new DishService(dishRepository);
 
         const dishes = await dishService.index(search);
-
-        if (!dishes) {
-            throw new AppError('No dishes found', 404);
-        }
 
         res.status(200).json(dishes);
     }

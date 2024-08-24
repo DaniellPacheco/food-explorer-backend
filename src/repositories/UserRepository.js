@@ -18,7 +18,7 @@ class UserRepository {
         return await knex('users').insert({ name, email, password: hashedPassword, is_admin });
     }
 
-    async update({ id, name, password, old_password, is_admin = 0 }) {
+    async update({ id, name, password, old_password, is_admin }) {
         return await knex('users').where({ id }).update({ name, password, old_password, is_admin })
     }
 

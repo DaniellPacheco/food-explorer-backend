@@ -16,7 +16,7 @@ class DishRepository {
     }
 
     async findAll(search) {
-        const { dishName, dishDescription } = search;
+        const { dishName, dishDescription } = search ? search : "";
 
         const dishes = await knex('dishes')
             .select(
