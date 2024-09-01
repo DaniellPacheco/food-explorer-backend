@@ -84,7 +84,7 @@ $ npm run migrate
 5. Inicie o servidor:
 
 ```
-$ npm start
+$ npm run dev
 ```
 
 ⚠️ **Importante**: Crie um arquivo .env de acordo com o arquivo .env.example e preencha os campos AUTH_SECRET e PORT com suas respectivas informações.
