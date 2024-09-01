@@ -49,7 +49,6 @@ Este projeto foi desenvolvido com as seguintes tecnologias:
 - Knex.js
 - Node.js
 - Multer
-- PM2
 - SQLite
 - SQLite3
 
