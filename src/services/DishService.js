@@ -72,8 +72,6 @@ class DishService {
             }
         });
 
-
-
         await this.dishIngredientRepository.create(ingredientsInsert);
 
         return dish_id;
@@ -85,7 +83,10 @@ class DishService {
         if (search) {
             const dishFiltered = search.split(",").map((dish) => dish.trim()).map((dish) => `%${dish}%`);
 
+
             const dishes = await this.dishRepository.findAll(dishFiltered);
+
+            // console.log(dishes);
 
             if (!dishes) {
                 throw new AppError("No dishes found", 404);
@@ -122,13 +123,20 @@ class DishService {
         const dishWithAllInformation = {
             ...dish,
             category: category.name,
-            ingredients: ingredients.map(ingredient => ingredient.name)
+            ingredients: ingredients.map((ingredient) => {
+                return {
+                    id: ingredient.id,
+                    name: ingredient.name
+                }
+            })
         }
 
         return dishWithAllInformation;
     }
 
     async update({ user_id, id, name, price, description, image, category, ingredients }) {
+
+        console.log(image);
 
         if (!user_id) {
             throw new AppError("User ID is required", 400);
@@ -171,17 +179,28 @@ class DishService {
             updated_by: user_id
         }
 
+        const diskStorage = new DiskStorage();
+        let filename = "";
+
         if (image) {
-            const diskStorage = new DiskStorage();
-
-            if (dish.image) {
-                await diskStorage.deleteFile(dish.image);
-            }
-
-            const filename = await diskStorage.saveFile(image);
+            filename = await diskStorage.saveFile(image);
             dishUpdate.image = filename;
-
         }
+
+        // if (image) {
+        //     const diskStorage = new DiskStorage();
+
+        //     if (dish.image) {
+        //         await diskStorage.deleteFile(dish.image);
+        //     }
+
+        //     const filename = await diskStorage.saveFile(image);
+        //     dishUpdate.image = filename;
+
+        // }
+
+        const dish_id = await this.dishRepository.update({ id, name: dishUpdate.name, price: dishUpdate.price, description: dishUpdate.description, image: dishUpdate.image, updated_by: dishUpdate.updated_by });
+
 
         if (category) {
             await this.dishCategoryRepository.deleteByDishId(id);
@@ -193,8 +212,35 @@ class DishService {
             });
         }
 
+        await this.dishIngredientRepository.deleteIngredients(id);
+
+
+        const ingredientsInsert = ingredients.map(name => {
+            return {
+                name,
+                dish_id: id,
+                user_id
+            }
+        });
+
+        await this.dishIngredientRepository.create(ingredientsInsert);
+
         return dishUpdate;
 
+    }
+
+    async updateImage(id, image) {
+
+        const diskStorage = new DiskStorage();
+        let filename = "";
+
+        if (image) {
+            filename = await diskStorage.saveFile(image);
+        }
+
+        await this.dishRepository.updateImage(id, filename);
+
+        return filename;
     }
 
     async delete(id) {

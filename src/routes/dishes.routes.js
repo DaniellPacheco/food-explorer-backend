@@ -15,12 +15,9 @@ dishesRoute.use(ensureAuthenticated);
 
 dishesRoute.get('/', dishController.index);
 dishesRoute.post('/', upload.single("image"), dishController.create);
-// dishesRoute.post('/', upload.single("image"), (req, res) => {
-//     console.log(req.file.filename);
-//     res.json();
-// });
 dishesRoute.get('/:id', dishController.show);
 dishesRoute.patch('/:id', dishController.update);
+dishesRoute.put('/:id', dishController.updateImage);
 dishesRoute.delete('/:id', dishController.delete);
 
 module.exports = dishesRoute;

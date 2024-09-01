@@ -132,6 +132,10 @@ class OrderService {
     async delete(id) {
         return await this.orderRepository.delete(id);
     }
+
+    async countDishesOrder(id) {
+
+    }
 }
 
 module.exports = OrderService;

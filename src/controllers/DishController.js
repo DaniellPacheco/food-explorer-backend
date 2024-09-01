@@ -28,7 +28,7 @@ class DishController {
             description,
             image,
             category,
-            ingredients
+            ingredients: JSON.parse(ingredients)
         });
 
         res.status(201).json({
@@ -74,6 +74,8 @@ class DishController {
         const { id } = req.params;
         const { name, price, description, category, ingredients } = req.body;
 
+        console.log(id);
+
         const user_id = req.user.id;
         const image = req.file ? req.file.filename : null;
 
@@ -87,20 +89,43 @@ class DishController {
         );
 
         const dish = await dishService.update({
+            user_id: parseInt(user_id),
             id: parseInt(id),
-            user_id,
             name,
             price,
             description,
             image,
             category,
-            ingredients
+            ingredients: ingredients
         });
 
         res.status(200).json({
             message: "Dish updated successfully",
             dish: dish,
         })
+    }
+
+    async updateImage(req, res) {
+        const { id } = req.params;
+        const image = req.file ? req.file.filename : null;
+
+        console.log(id, image);
+
+        const dishIngredientRepository = new DishIngredientRepository();
+        const dishCategoryRepository = new DishCategoryRepository();
+        const dishRepository = new DishRepository();
+        const dishService = new DishService(
+            dishRepository,
+            dishCategoryRepository,
+            dishIngredientRepository
+        );
+
+        await this.dishService.updateImage(id, image);
+
+        return res.status(200).json({
+            message: "Dish image updated successfully"
+        })
+
     }
 
     async delete(req, res) {

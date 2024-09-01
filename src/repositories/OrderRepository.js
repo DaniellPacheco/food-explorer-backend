@@ -82,6 +82,16 @@ class OrderRepository {
     async delete(id) {
         return await knex('orders').where({ id }).del();
     }
+
+    async countDishesOrder(user_id, id) {
+        return await knex('orders_items')
+            .count('orders_items.id')
+            .join('orders', 'orders.id', 'orders_items.order_id')
+            .where({
+                'orders.created_by': user_id,
+                'orders.id': id
+            });
+    }
 }
 
 module.exports = OrderRepository;

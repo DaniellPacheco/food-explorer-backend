@@ -14,8 +14,14 @@ class DishIngredientRepository {
     }
 
     async findByDishId(id) {
-        return await knex('dishes_ingredients').select("name").where({ dish_id: id });
+        return await knex('dishes_ingredients').select("id", "name").where({ dish_id: id });
     }
+
+    async deleteIngredients(id) {
+        return await knex("dishes_ingredients").where({ dish_id: id }).delete();
+    }
+
+
 }
 
 module.exports = DishIngredientRepository;
